@@ -18,6 +18,8 @@ if [ -z "$USERS" ]; then
   USERS="ftp|alpineftp"
 fi
 
+rm -rfv /etc/vsftpd/vsftpd.chroot_list
+
 for i in $USERS ; do
     NAME=$(echo $i | cut -d'|' -f1)
     PASS=$(echo $i | cut -d'|' -f2)
@@ -35,6 +37,7 @@ for i in $USERS ; do
   echo -e "$PASS\n$PASS" | adduser -h $FOLDER -s /sbin/nologin $UID_OPT $NAME
   mkdir -p $FOLDER
   chown $NAME:$NAME $FOLDER
+  echo $NAME >> /etc/vsftpd/vsftpd.chroot_list 
   unset NAME PASS FOLDER UID
 done
 
